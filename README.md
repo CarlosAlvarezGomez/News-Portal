@@ -1,3 +1,9 @@
+## Website
+
+News Website that lists articles from a given database
+
+## NPM Stuff
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
