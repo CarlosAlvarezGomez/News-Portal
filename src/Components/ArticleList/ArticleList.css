@@ -1,0 +1,25 @@
+Article {
+  margin: auto;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: auto;
+  align-content: center;
+  align-self: center;
+  border-style: solid;
+  border-style: solid;
+  min-height: 1rem;
+  min-width: 1rem;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.column {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  float: left;
+  width: 50%;
+}

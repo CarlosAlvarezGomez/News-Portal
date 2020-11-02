@@ -1,0 +1,21 @@
+button {
+  cursor: pointer;
+  text-align: center;
+  width: 14.25%;
+  height: 2rem;
+  font-size: 105%;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  padding-top: auto;
+  padding-bottom: auto;
+  background-color: blue;
+  color: white;
+  box-shadow: none;
+  border-style: none;
+  display: inline-block;
+}
+
+button:hover {
+  background-color: darkblue;
+  font-weight: 550;
+}

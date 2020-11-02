@@ -1,0 +1,56 @@
+.article {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 7rem;
+  border-style: none;
+  padding: 2%;
+  margin: 0.5%;
+  border-radius: 0.1rem;
+  border-color: black;
+}
+
+.article:hover {
+  cursor: pointer;
+  background-color: rgb(75, 75, 75);
+}
+
+h3 {
+  margin: 0;
+  padding: 0;
+  float: none;
+}
+
+h6 {
+  float: none;
+  margin: 0;
+  padding: 0;
+}
+
+h5 {
+  width: auto;
+  height: 50%;
+  margin-top: 0;
+  padding-top: 0;
+  float: left;
+}
+
+img {
+  margin-right: 0;
+  padding-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-width: 10rem;
+  width: auto;
+  height: auto;
+}
+
+.text {
+  float: left;
+  width: 70%;
+  height: 50%;
+  color: white;
+}
