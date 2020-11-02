@@ -1,34 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import { NavBar } from './Components/NavBar/NavBar';
 import { ArticleList } from './Components/ArticleList/ArticleList';
-import { render } from '@testing-library/react';
 
+const App  = () => {
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { category: "us" };
-    this.handleNavBarClick = this.handleNavBarClick.bind(this)
-  }
+  const [category, setCategory] = useState("us")
 
-  handleNavBarClick(cat) {
-    this.setState({ category: cat })
-  }
-
-  render() {
-    return (
+  return (
       <div>
         <section className="heading">
           <h1 className="heading">WEBSITE NAME</h1>
-          <NavBar onButtonClick={this.handleNavBarClick} className="heading" />
+          {NavBar(setCategory)}
         </section>
         <section className="articleLists">
-          <ArticleList className="artricleList" category={this.state.category} />
+         {ArticleList(category)}
         </section>
       </div>
     );
-  }
 }
 
 export default App;

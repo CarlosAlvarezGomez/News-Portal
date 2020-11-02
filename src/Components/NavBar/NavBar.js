@@ -4,23 +4,17 @@ import { Button } from '../Button/Button';
 
 const tabs = ["US", "World", "Politics", "Business", "Health", "Entertainment", "Opinion"];
 
+const createTabButtons = (setCategory) => {
+  return (tabs.map((word) => Button(setCategory, word)));
+}
 
-export class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+export const NavBar = (setCategory) => {
 
-  createTabButtons() {
-    return (tabs.map((word) => <Button handleOnClick={this.props.onButtonClick} text={word} />));
-  }
-
-  render() {
     return (
       <nav>
         <ul>
-          {this.createTabButtons()}
+          {createTabButtons(setCategory)}
         </ul>
       </nav>
     );
-  }
 }
