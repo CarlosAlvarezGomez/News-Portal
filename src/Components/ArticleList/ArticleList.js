@@ -1,36 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import './ArticleList.css';
 import { Article } from '../Article/Article';
 import { useGetArticles } from './useGetArticles';
 
-export class ArticleList extends React.Component {
-  handleScroll(e) {
-    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-    if (bottom) {
+export function ArticleList(category) {
 
-    }
-  }
+  const [pageNumber, setPageNumber] = useState(1)
 
-  render() {
-    return (
+  const {loading, error, articles, hasMore} = useGetArticles(category, pageNumber)
+
+  const observer = useRef()
+  const lastArticleElementRef = useCallback(node =>
+    {
+      if (loading) {
+        return
+      }
+      if (observer.current) {
+        observer.current.disconnect()
+      }
+      observer.current = new IntersectionObserver( entries => {
+        if (entries[0].isIntersecting && hasMore) {
+          console.log("CHANGED PAGENUMBER")
+          setPageNumber(prevPageNumber => prevPageNumber + 1)
+        }
+      })
+      if (node) observer.current.observe(node)
+    }, [loading, hasMore])
+
+  return (
       <ul>
         <div className="row">
           <div className="column">
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
+            {articles.map( (art, index) => {
+              if (articles.length === index + 1){
+                return (<div ref={lastArticleElementRef}>{Article(art)}</div>);
+              } 
+              else {
+                return Article(art);
+              }
+              }
+            )
+            }
+
           </div>
           <div className="column">
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
-            <Article image={this.props.category} />
+            {articles.map( (art, index) => {
+              return Article(art)})}
           </div>
         </div>
       </ul>
     )
   }
-}
