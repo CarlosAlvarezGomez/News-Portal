@@ -10,7 +10,7 @@ const App  = () => {
   return (
       <div>
         <section className="heading">
-          <h1 className="heading">WEBSITE NAME</h1>
+          <h1 className="title">WEBSITE NAME</h1>
           {NavBar(setCategory)}
         </section>
         <section className="articleLists">
