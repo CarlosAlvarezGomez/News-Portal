@@ -1,18 +1,26 @@
 import React from 'react';
 import './Article.css';
 
-export function Article(image) {
-
-  return (
-    <div className="article">
-      <div className="text">
-        <h3 >Main Headline Goes Here</h3>
-        <h6>Author And Date Go Here</h6>
-        <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in volupt</h5>
-      </div>
+function addImage(imgLink) {
+  if (imgLink != "") {
+    return (
       <div className="image">
-        <img src={require("../../Images/" + image + ".jpg")} />
+        <img src={imgLink} />
       </div>
+    )}
+}
+
+export function Article(art) {
+  console.log(art)
+  return (
+    <div className="article" href={art.Link}>
+      <div className="textGroup">
+        <h3 className="text">{art.Headline}</h3>
+        <h6 className="text">By {art.Author}</h6>
+        <h6 className="text">Updated {art.UpdateTime.substring(0,20)}</h6>
+        <h4 className="text">{art.SubHeadline}</h4>
+      </div>
+      {addImage(art.Image)}
     </div>
   );
 }

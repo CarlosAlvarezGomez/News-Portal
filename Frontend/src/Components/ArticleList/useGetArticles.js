@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export function useGetArticles(category, pageNumber) {
   const [loading, setLoading] = useState(true);
@@ -13,10 +14,16 @@ export function useGetArticles(category, pageNumber) {
     // Requst next page of articles from api and append it to current list of
     // articles
     var newArticles = []
-    for (var i=0; i < 10; i++){
-      newArticles.push(category)
+    for (var i=0; i < 10; i++) {
+      axios({
+        method: 'GET',
+        url:'http://localhost:8081/articles/',
+        params: {category: category, requestNumber: 0}
+      }).then(res => {
+        newArticles.concat(res.data)
+      })
+      
     }
-    console.log("ADDED ARTICLES")
     setArticles(articles.concat(newArticles))
 
     setHasMore(true);
@@ -30,10 +37,14 @@ export function useGetArticles(category, pageNumber) {
     // Requst first page of articles for new category from api and append it to
     // current list of articles
     var newArticles = []
-    for (var i=0; i < 10; i++){
-      newArticles.push(category)
-    }
-    setArticles(newArticles)
+    axios({
+      method: 'GET',
+      url:'url',
+      params: {category: category, requestNumber: 0}
+    }).then(res => {
+      newArticles = res.data
+      setArticles(newArticles)
+    })
 
     setHasMore(true);
     setLoading(false);
