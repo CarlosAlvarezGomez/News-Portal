@@ -1,21 +1,25 @@
 .heading {
-  margin-top: -2.5rem;
-  width: 100%;
-  background-color: black;
-  color: white;
   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: auto;
 }
 
-div section {
+section {
   background-color: black;
 }
 
 h1 {
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  offset-position: 0;
-  width: 100%;
+  top: 0;
+  z-index: 2;
+  position: fixed;
+}
+
+NavBar {
+  z-index: 1;
+  bottom: 0;
+  position: fixed;
 }
 
 .articleLists {

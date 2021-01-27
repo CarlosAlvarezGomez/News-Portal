@@ -33,13 +33,10 @@ export function ArticleList(category) {
             {articles.map( (art, index) => {
               if (articles.length === index + 1){
                 return (<div ref={lastArticleElementRef}>{Article(art)}</div>);
-              } 
-              else {
+              } else {
                 return Article(art);
               }
-              }
-            )
-            }
+            })}
 
           </div>
           <div className="column">
