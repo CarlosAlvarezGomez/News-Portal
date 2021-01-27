@@ -39,7 +39,7 @@ export function useGetArticles(category, pageNumber) {
     var newArticles = []
     axios({
       method: 'GET',
-      url:'url',
+      url:'http://localhost:8081/articles/',
       params: {category: category, requestNumber: 0}
     }).then(res => {
       newArticles = res.data
