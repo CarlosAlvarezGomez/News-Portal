@@ -7,7 +7,7 @@ export function ArticleList(category) {
 
   const [pageNumber, setPageNumber] = useState(1)
 
-  const {loading, error, articles, hasMore} = useGetArticles(category, pageNumber)
+  const {loading, error, articles, hasMore} = useGetArticles(category, pageNumber, setPageNumber)
 
   const observer = useRef()
   const lastArticleElementRef = useCallback(node =>
@@ -20,6 +20,7 @@ export function ArticleList(category) {
       }
       observer.current = new IntersectionObserver( entries => {
         if (entries[0].isIntersecting && hasMore) {
+          console.log('Updated pageNumber')
           setPageNumber(prevPageNumber => prevPageNumber + 1)
         }
       })
@@ -28,22 +29,25 @@ export function ArticleList(category) {
 
   return (
       <ul>
-        <div className="row">
           <div className="column">
             {articles.map( (art, index) => {
-              if (articles.length === index + 1){
-                return (<div ref={lastArticleElementRef}>{Article(art)}</div>);
+              if (articles.length === index + 2) {
+                return (<div ref={lastArticleElementRef}>{Article(art, index, 'left')}</div>);
               } else {
-                return Article(art);
+                return Article(art, index, 'left');
               }
             })}
 
           </div>
           <div className="column">
             {articles.map( (art, index) => {
-              return Article(art)})}
+              if (articles.length === index + 2) {
+                return (<div ref={lastArticleElementRef}>{Article(art, index, 'right')}</div>);
+              } else {
+                return Article(art, index, 'right');
+              }
+            })}
           </div>
-        </div>
       </ul>
     )
   }

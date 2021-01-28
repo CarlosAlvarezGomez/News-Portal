@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export function useGetArticles(category, pageNumber) {
+export function useGetArticles(category, pageNumber, setPageNumber) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -18,13 +18,17 @@ export function useGetArticles(category, pageNumber) {
       axios({
         method: 'GET',
         url:'http://localhost:8081/articles/',
-        params: {category: category, requestNumber: 0}
+        params: {category: category, requestNumber: pageNumber}
       }).then(res => {
-        newArticles.concat(res.data)
+        setArticles([... articles, ...res.data])
+      }).catch( err => {
+        setError(true)
       })
       
     }
-    setArticles(articles.concat(newArticles))
+    console.log('Updated Articles')
+
+    // setArticles(articles.concat(newArticles))
 
     setHasMore(true);
     setLoading(false);
@@ -40,9 +44,10 @@ export function useGetArticles(category, pageNumber) {
     axios({
       method: 'GET',
       url:'http://localhost:8081/articles/',
-      params: {category: category, requestNumber: 0}
+      params: {category: category, requestNumber: pageNumber}
     }).then(res => {
       newArticles = res.data
+      setPageNumber(0)
       setArticles(newArticles)
     })
 

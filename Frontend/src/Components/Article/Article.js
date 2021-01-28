@@ -2,16 +2,19 @@ import React from 'react';
 import './Article.css';
 
 function addImage(imgLink) {
-  if (imgLink != "") {
+  if (imgLink !== "") {
     return (
       <div className="image">
-        <img src={imgLink} />
+        <img src={imgLink} alt='Not Found' />
       </div>
     )}
 }
 
-export function Article(art) {
-  console.log(art)
+export function Article(art, index, columnName) {
+  if (((columnName === 'left') && (index%2 === 0)) || ((columnName === 'right') && (index%2 === 1))){
+    console.log('Did not return article')
+    return
+  }
   return (
     <div className="article" href={art.Link}>
       <div className="textGroup">

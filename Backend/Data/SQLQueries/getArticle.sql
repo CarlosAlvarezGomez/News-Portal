@@ -1,7 +1,7 @@
 WITH NewTable AS
 (
     SELECT *,
-    ROW_NUMBER() OVER (ORDER BY Score DESC) AS RowNumber
+    ROW_NUMBER() OVER (ORDER BY Score, Headline DESC) AS RowNumber
     FROM ArticleInfo
     WHERE Category=@Category
 )
