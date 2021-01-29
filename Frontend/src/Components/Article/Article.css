@@ -1,13 +1,10 @@
 .article {
   width: 100%;
-  height: 100%;
-  margin: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  height: 10%;
   min-height: 7rem;
   border-style: none;
-  padding: 2%;
   border-radius: 0.1rem;
+  box-sizing: content-box;
 }
 
 .article:hover {
@@ -15,40 +12,28 @@
   background-color: rgb(75, 75, 75);
 }
 
-/* h3 {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  float: none;
-}
-
-h6 {
-  float: none;
-  margin: 0;
+.image {
+  top: 0;
+  display: inline-block;
+  width: 30%;
+  height: 100%;
   padding: 0;
 }
-
-h5 {
-  width: auto;
-  height: 50%;
-  margin-top: 0;
-  padding-top: 0;
-  float: left;
-} */
 
 img {
-  margin:0;
-  padding: 0;
-  max-width: 10rem;
+  top: 0;
   width: 100%;
   height: 100%;
 }
 
-.textGroup .text {
-  float: left;
-  margin: 0;
-  padding: 0;
-  width:97%;
-  height: 10%;
+.text {
+  margin-bottom: 0;
+  border-width: 0;
   color: white;
+}
+
+.textGroup {
+  display: inline-block;
+  width: 70%;
+  height: 100%
 }

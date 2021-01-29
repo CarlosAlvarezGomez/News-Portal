@@ -11,7 +11,9 @@ const App  = () => {
       <div>
         <section className="heading">
           <title><h1>WEBSITE TITLE</h1></title>
-          {NavBar(setCategory)}
+          <div className="navBar">
+            {NavBar(setCategory)}
+          </div>
         </section>
         <section className="articleLists">
          {ArticleList(category)}

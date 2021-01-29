@@ -12,8 +12,7 @@ function addImage(imgLink) {
 
 export function Article(art, index, columnName) {
   if (((columnName === 'left') && (index%2 === 0)) || ((columnName === 'right') && (index%2 === 1))){
-    console.log('Did not return article')
-    return
+    return;
   }
   return (
     <div className="article" href={art.Link}>

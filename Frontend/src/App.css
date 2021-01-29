@@ -6,19 +6,21 @@
   height: auto;
 }
 
-section {
-  background-color: black;
+title {
+  width: 100%;
+  display: block;
+}
+
+.navBar {
+  display: block;
+  width: 100%;
 }
 
 h1 {
   top: 0;
   z-index: 2;
-  position: fixed;
-}
-
-NavBar {
-  z-index: 1;
-  bottom: 0;
+  width: 100%;
+  color: white;
   position: fixed;
 }
 
