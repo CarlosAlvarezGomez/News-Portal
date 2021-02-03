@@ -18,7 +18,7 @@ from sqlalchemy import create_engine
 import bs4
 import datetime
 import pandas as pd
-import pymssql
+# import pymssql
 import re
 import requests
 import time
@@ -26,13 +26,21 @@ import time
 # Creates global variables
 
 # List of domains we plan to scrape
-domains = ([# 'https://abcnews.go.com',
-'https://cornellsun.com/',
-# 'https://www.cnn.com',
-# 'https://www.foxbusiness.com',
-# 'https://www.foxnews.com',
-# 'https://www.nbcnews.com',
-# 'https://www.theguardian.com'
+domains = ([# 'https://abcnews.go.com', Y
+# 'https://www.dailywire.com/', Y
+# 'https://www.latimes.com', N
+# 'https://www.cnn.com', N
+# 'https://www.miamiherald.com', N
+# 'https://www.univision.com/univision-news', Y
+# 'https://www.foxbusiness.com', N
+# 'https://www.foxnews.com', N
+# 'https://www.nbcnews.com', Y
+# 'https://www.theguardian.com' N
+# 'https://theintercept.com', N
+# WSJ P
+# NY Times P
+# 'https://www.washingtonpost.com', P
+# 'https://www.dailymail.co.uk/home/index.html', Y
 ])
 
 # List of categories the articles will be in
@@ -81,9 +89,6 @@ def getSoup(url):
     # Connects to the main domain page and gets the HTML code from that page
     page_html = requests.get(url).text
     print('Here 2')
-    print(requests.get(url))
-    print('Here 3')
-
     # Turns the html code into a soup and returns it
     return soup(page_html, "html.parser")
 
@@ -96,8 +101,6 @@ def getAssociatedCategory(element):
 
     # Checks if this is a tag and if it has an href
     if (type(element) == bs4.element.Tag) and ('href' in element.attrs.keys()):
-
-        print(element.prettify())
 
         # Splits the href and formats each substring within the href
         subStrings = list(map(formatString, element['href'].split('/')))
@@ -282,7 +285,7 @@ def getArticles(category, domain, lastUpdate, mainLink):
 
     # func = lambda articleLink : getArticleInfo(articleLink, domain, category, lastUpdate)
     # articlesInfo = list(map(func, articleLinks))
-
+    count = 0
     for articleLink in articleLinks:
 
         # This if-statement is here in order to avoid the error I was getting
@@ -292,11 +295,15 @@ def getArticles(category, domain, lastUpdate, mainLink):
         # print(articleLink)
         articlesInfo = getArticleInfo(articleLink, domain, category, lastUpdate)
 
+        print(articleLink)
         # Checks if article info was actually found
         if articlesInfo != None:
 
             # Checks if the article is already in the list
             if articleLink not in artLinks:
+
+                count += 1
+                print(count)
 
                 # Adds a category and link item to the article dictionary
                 articlesInfo['category'] = category
@@ -349,40 +356,36 @@ def domainScrape(domain, lastUpdate):
 
     # Gets a bs4 element containing the html code for each domain
     pageSoup = getSoup(domain)
-    print(pageSoup.prettify())
 
     # Gets a list of all relevant attributes from within the soup
     linkTuplesList = getRelevantLinks(pageSoup)
-    print("Found " + str(len(linkTuplesList)) + " Links")
-    for x in linkTuplesList:
-        print(x)
-    input()
+
     # Selects a subset of the links from the list above that only contains links
     # to the main categories in the website
     categoryLinkTuples = getCategoryLinks(domain, linkTuplesList)
-
     for x in categoryLinkTuples:
         print(x)
+
     # Initializes lists that will store all the author, categories, headlines,
     # images, links, scores, sub-headlines, and update times for each article
-    # allArticles = []
+    allArticles = []
 
-    # # Goes through each tuple and gets a cetegory, headline, sub-headline, link
-    # # image, update time, author, and a score for each article found on each 
-    # # category link. Returns a list for each one of these elements
-    # func1 = lambda clt: getArticles(clt[0], domain, lastUpdate, clt[1])
-    # allArticles = removeDuplicateDicts(flatten(list(map(func1, categoryLinkTuples))), 'link')
+    # Goes through each tuple and gets a cetegory, headline, sub-headline, link
+    # image, update time, author, and a score for each article found on each 
+    # category link. Returns a list for each one of these elements
+    func1 = lambda clt: getArticles(clt[0], domain, lastUpdate, clt[1])
+    allArticles = removeDuplicateDicts(flatten(list(map(func1, categoryLinkTuples))), 'link')
     
-    # # Converts the list of dictionaries into 2D array by replacing each 
-    # # dictionary with a 1D list
-    # articleArray = list(map(lambda x : x.values(), allArticles))
+    # Converts the list of dictionaries into 2D array by replacing each 
+    # dictionary with a 1D list
+    articleArray = list(map(lambda x : x.values(), allArticles))
 
-    # # Converts the 2D array into a pandas dataframe
-    # articlesDF = pd.DataFrame(articleArray, columns=['Author', 'Headline',
-    # 'SubHeadline', 'Image', 'UpdateTime', 'Score', 'Category', 'Link'])
+    # Converts the 2D array into a pandas dataframe
+    articlesDF = pd.DataFrame(articleArray, columns=['Author', 'Headline',
+    'SubHeadline', 'Image', 'UpdateTime', 'Score', 'Category', 'Link'])
 
-    # # Returns the dataframe
-    # return articlesDF
+    # Returns the dataframe
+    return articlesDF
 
 lastUpdate = datetime.datetime(2021, 1, 23, 23, 33)
 func = lambda x : domainScrape(x, lastUpdate)
