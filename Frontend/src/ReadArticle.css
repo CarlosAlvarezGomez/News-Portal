@@ -1,0 +1,38 @@
+.heading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  title {
+    top: 0;
+    display: block;
+  }
+  
+  .navBar {
+    width: 100%;
+  }
+  
+  h1 {
+    width: 100%;
+    background-color: black;
+    text-align: center;
+    color: white;
+    position: relative;;
+    top: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  div {
+    height: 100%;
+    width: 100%;
+  }
+
+  iframe {
+    margin-top: 3.5rem;
+    width: 100%;
+    height: 59rem;
+    background-color: black;
+  }

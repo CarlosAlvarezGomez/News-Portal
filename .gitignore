@@ -3,7 +3,6 @@
 Backend/.env
 Backend/node_modules
 
-
 # dependencies
 Frontend/node_modules
 Frontend/.pnp
@@ -26,3 +25,4 @@ Frontend/npm-debug.log*
 Frontend/yarn-debug.log*
 Frontend/yarn-error.log*
 
+NewsScraper/Creds.py

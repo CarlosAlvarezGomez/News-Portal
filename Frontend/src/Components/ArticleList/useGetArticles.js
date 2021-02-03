@@ -13,7 +13,6 @@ export function useGetArticles(category, pageNumber, setPageNumber) {
 
     // Requst next page of articles from api and append it to current list of
     // articles
-    var newArticles = []
     for (var i=0; i < 10; i++) {
       axios({
         method: 'GET',
@@ -26,7 +25,6 @@ export function useGetArticles(category, pageNumber, setPageNumber) {
       })
       
     }
-    console.log('Updated Articles')
 
     // setArticles(articles.concat(newArticles))
 
@@ -34,25 +32,5 @@ export function useGetArticles(category, pageNumber, setPageNumber) {
     setLoading(false);
   }, [pageNumber])
 
-  useEffect(() => {
-    setLoading(true);
-    setError(false);
-
-    // Requst first page of articles for new category from api and append it to
-    // current list of articles
-    var newArticles = []
-    axios({
-      method: 'GET',
-      url:'http://localhost:8081/articles/',
-      params: {category: category, requestNumber: pageNumber}
-    }).then(res => {
-      newArticles = res.data
-      setPageNumber(0)
-      setArticles(newArticles)
-    })
-
-    setHasMore(true);
-    setLoading(false);
-  }, [category])
   return { loading, error, articles, hasMore };
 }

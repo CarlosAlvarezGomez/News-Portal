@@ -20,7 +20,6 @@ export function ArticleList(category) {
       }
       observer.current = new IntersectionObserver( entries => {
         if (entries[0].isIntersecting && hasMore) {
-          console.log('Updated pageNumber')
           setPageNumber(prevPageNumber => prevPageNumber + 1)
         }
       })

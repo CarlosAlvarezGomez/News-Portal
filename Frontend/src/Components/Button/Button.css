@@ -12,6 +12,20 @@ button {
   border-style: none;
 }
 
+a {
+  cursor: pointer;
+  text-align: center;
+  width: 14.2857142857%;
+  height: 2rem;
+  font-size: 105%;
+  padding: 0;
+  margin: 0;
+  background-color: blue;
+  border-radius: 0%;
+  color: white;
+  border-style: none;
+}
+
 button:hover {
   background-color: darkblue;
   font-weight: 550;

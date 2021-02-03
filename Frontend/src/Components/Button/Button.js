@@ -1,12 +1,11 @@
 import React from 'react';
 import './Button.css';
 
-export const Button = (setCategory, text) => {
+export const Button = (text) => {
 
     return (
-      <button
-        onClick={
-          () => { setCategory(text.toLowerCase()) }}>
-        {text}
-      </button>);
+        <button key={'Button: ' + text} onClick={() => window.location= ('http://localhost:3000/' + text).toLowerCase()}>
+          {text}
+        </button>
+      );
 }
