@@ -26,21 +26,21 @@ import time
 # Creates global variables
 
 # List of domains we plan to scrape
-domains = ([# 'https://abcnews.go.com', Y
-# 'https://www.dailywire.com/', Y
-# 'https://www.latimes.com', N
+domains = ([ # 'https://abcnews.go.com',
+# 'https://theintercept.com', N
 # 'https://www.cnn.com', N
-# 'https://www.miamiherald.com', N
-# 'https://www.univision.com/univision-news', Y
+'https://www.dailymail.co.uk/home/index.html',
+'https://www.dailywire.com/',
 # 'https://www.foxbusiness.com', N
 # 'https://www.foxnews.com', N
-# 'https://www.nbcnews.com', Y
+# 'https://www.latimes.com', N
+# 'https://www.miamiherald.com', N
+'https://www.nbcnews.com',
+# 'https://www.nytimes.com', Paywall
 # 'https://www.theguardian.com' N
-# 'https://theintercept.com', N
-# WSJ P
-# NY Times P
-# 'https://www.washingtonpost.com', P
-# 'https://www.dailymail.co.uk/home/index.html', Y
+'https://www.univision.com/univision-news',
+# 'https://www.washingtonpost.com', Paywall
+# 'https://www.wsj.com', Paywall
 ])
 
 # List of categories the articles will be in
@@ -85,10 +85,10 @@ def getTime(time, ampm):
 # Takes in a URL and returns a bs4 element containing the html code from that
 # URL
 def getSoup(url):
-    print('Here 1')
+
     # Connects to the main domain page and gets the HTML code from that page
     page_html = requests.get(url).text
-    print('Here 2')
+
     # Turns the html code into a soup and returns it
     return soup(page_html, "html.parser")
 
@@ -292,10 +292,10 @@ def getArticles(category, domain, lastUpdate, mainLink):
         # where a link, â, would print and the program would stop working
         if 'â' in articleLink:
             continue
-        # print(articleLink)
-        articlesInfo = getArticleInfo(articleLink, domain, category, lastUpdate)
 
         print(articleLink)
+        articlesInfo = getArticleInfo(articleLink, domain, category, lastUpdate)
+
         # Checks if article info was actually found
         if articlesInfo != None:
 
