@@ -13,12 +13,13 @@ from format1Scraper import getArticleInfoFormat1
 from format2Scraper import getArticleInfoFormat2
 from format3Scraper import getArticleInfoFormat3
 from format4Scraper import getArticleInfoFormat4
+from format5Scraper import getArticleInfoFormat5
 from StringHelpers import *
 from sqlalchemy import create_engine
 import bs4
 import datetime
 import pandas as pd
-# import pymssql
+import pymssql
 import re
 import requests
 import time
@@ -27,17 +28,17 @@ import time
 
 # List of domains we plan to scrape
 domains = ([ # 'https://abcnews.go.com',
-# 'https://theintercept.com', N
-# 'https://www.cnn.com', N
-'https://www.dailymail.co.uk/home/index.html',
+# 'https://theintercept.com', Not working
+# 'https://www.cnn.com', Not working
+'https://www.dailymail.co.uk',
 'https://www.dailywire.com/',
-# 'https://www.foxbusiness.com', N
-# 'https://www.foxnews.com', N
-# 'https://www.latimes.com', N
-# 'https://www.miamiherald.com', N
+# 'https://www.foxbusiness.com', Not working
+# 'https://www.foxnews.com', Not working
+# 'https://www.latimes.com', Not working
+# 'https://www.miamiherald.com', Not working
 'https://www.nbcnews.com',
 # 'https://www.nytimes.com', Paywall
-# 'https://www.theguardian.com' N
+# 'https://www.theguardian.com' Not working
 'https://www.univision.com/univision-news',
 # 'https://www.washingtonpost.com', Paywall
 # 'https://www.wsj.com', Paywall
@@ -132,7 +133,8 @@ def getRelevantLinks(soup):
 def formatStartOfLink(domain, link):
     # Adds a domain if necessary
     link = link.lower()
-    if ('.com' not in link) and ('.org' not in link) and ('.net' not in link):
+    if ('.com' not in link) and ('.org' not in link) and ('.net' not in link) \
+        and ('.co.uk' not in link):
         link = domain + link
 
     # Adds https:// if necessary
@@ -250,6 +252,18 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
     # https://www.nbcnews.com/news/us-news/nick-ut-photojournalist-who-made-fame
     # d-vietnam-war-napalm-girl-n1254517
     articleInfo = getArticleInfoFormat4(page_html)
+    if (articleInfo != None):
+        if (articleInfo['updateTime'] > lastUpdate):
+            articleInfo['score'] = getScore(articleInfo)
+            return articleInfo
+        else:
+            return None
+
+    # Tries to get the information from the link assuming the format of the
+    # website is similar to the format of 
+    # https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mummy-do
+    # esnt-match-3-000-year-old-coffin.html
+    articleInfo = getArticleInfoFormat5(page_html)
     if (articleInfo != None):
         if (articleInfo['updateTime'] > lastUpdate):
             articleInfo['score'] = getScore(articleInfo)
@@ -392,3 +406,7 @@ func = lambda x : domainScrape(x, lastUpdate)
 
 for domain in domains:
     func(domain)
+
+# dmail_html = 'https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mummy-doesnt-match-3-000-year-old-coffin.html'
+# dmail_soup = getSoup(dmail_html)
+# getArticleInfoFormat5(dmail_soup)

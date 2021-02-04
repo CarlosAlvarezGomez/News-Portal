@@ -14,7 +14,7 @@ const ReadArticle  = () => {
             {NavBar()}
           </div>
         </section>
-        <iframe src="https://cornellsun.com/2020/12/17/editorial-cornell-administrators-must-advocate-for-their-marginalized-students"/>
+        <iframe src="https://www.dailymail.co.uk/news/article-9217377/Joe-Jill-Biden-pay-respects-Officer-Brian-Sicknick-lies-honor-Capitol.html"/>
       </div>
     );
 }

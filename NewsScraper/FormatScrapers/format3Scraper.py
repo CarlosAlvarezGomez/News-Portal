@@ -74,9 +74,9 @@ def getArticleInfoFormat3(page_html):
         else:
             try:
                 month = monthString2Int(timeStrings[-2])
+                updateTime = datetime.datetime(currentTime.year, month, int(timeStrings[-1]))
             except:
-                return None
-            updateTime = datetime.datetime(currentTime.year, month, int(timeStrings[-1]))
+                return None 
     else:
         return None
 
