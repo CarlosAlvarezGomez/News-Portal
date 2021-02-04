@@ -14,6 +14,7 @@ from format2Scraper import getArticleInfoFormat2
 from format3Scraper import getArticleInfoFormat3
 from format4Scraper import getArticleInfoFormat4
 from format5Scraper import getArticleInfoFormat5
+from format6Scraper import getArticleInfoFormat6
 from StringHelpers import *
 from sqlalchemy import create_engine
 import bs4
@@ -30,8 +31,8 @@ import time
 domains = ([ # 'https://abcnews.go.com',
 # 'https://theintercept.com', Not working
 # 'https://www.cnn.com', Not working
-'https://www.dailymail.co.uk',
-'https://www.dailywire.com/',
+# 'https://www.dailymail.co.uk',
+'https://www.dailywire.com',
 # 'https://www.foxbusiness.com', Not working
 # 'https://www.foxnews.com', Not working
 # 'https://www.latimes.com', Not working
@@ -209,67 +210,84 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         print('Could not access: ' + articleLink)
         return None
 
-    # Tries to get the information from the link assuming the format of the
-    # website is similar to the format of
-    # https://abcnews.go.com/Politics/wireStory/extraordinary-warning-trump-10-p
-    # entagon-chiefs-75029997?cid=clicksource_4380645_2_heads_hero_live_headline
-    # s_hed
-    articleInfo = getArticleInfoFormat1(page_html)
-    if (articleInfo != None):
-        if (articleInfo['updateTime'] > lastUpdate):
-            articleInfo['score'] = getScore(articleInfo)
-            return articleInfo
-        else:
-            return None
-
-    # Tries to get the information from the link assuming the format of the
-    # website is similar to the format of
-    # https://www.cnn.com/2021/01/06/health/south-africa-sequencing-coronavirus-
-    # variant/index.html
-    articleInfo = getArticleInfoFormat2(page_html)
-    if (articleInfo != None):
-        if (articleInfo['updateTime'] > lastUpdate):
-            articleInfo['score'] = getScore(articleInfo)
-            return articleInfo
-        else:
-            return None
+    # Finds the category in the page_html if necessary
+    if category == '':
 
 
-    # Tries to get the information from the link assuming the format of the
-    # website is similar to the format of
-    # https://www.foxbusiness.com/real-estate/3d-printed-buildings-california-ho
-    # using-crisis
-    articleInfo = getArticleInfoFormat3(page_html)
-    if (articleInfo != None):
-        if (articleInfo['updateTime'] > lastUpdate):
-            articleInfo['score'] = getScore(articleInfo)
-            return articleInfo
-        else:
-            return None
-    
-    # Tries to get the information from the link assuming the format of the
-    # website is similar to the format of 
-    # https://www.nbcnews.com/news/us-news/nick-ut-photojournalist-who-made-fame
-    # d-vietnam-war-napalm-girl-n1254517
-    articleInfo = getArticleInfoFormat4(page_html)
-    if (articleInfo != None):
-        if (articleInfo['updateTime'] > lastUpdate):
-            articleInfo['score'] = getScore(articleInfo)
-            return articleInfo
-        else:
-            return None
 
-    # Tries to get the information from the link assuming the format of the
-    # website is similar to the format of 
-    # https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mummy-do
-    # esnt-match-3-000-year-old-coffin.html
-    articleInfo = getArticleInfoFormat5(page_html)
-    if (articleInfo != None):
-        if (articleInfo['updateTime'] > lastUpdate):
-            articleInfo['score'] = getScore(articleInfo)
-            return articleInfo
-        else:
-            return None
+    # Finds the remaining necessary info given the category
+    else:
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of
+        # https://abcnews.go.com/Politics/wireStory/extraordinary-warning-trump
+        # -10-pentagon-chiefs-75029997?cid=clicksource_4380645_2_heads_hero_liv
+        # e_headlines_hed
+        articleInfo = getArticleInfoFormat1(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
+
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of
+        # https://www.cnn.com/2021/01/06/health/south-africa-sequencing-coronav
+        # irus-variant/index.html
+        articleInfo = getArticleInfoFormat2(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
+
+
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of
+        # https://www.foxbusiness.com/real-estate/3d-printed-buildings-californ
+        # ia-housing-crisis
+        articleInfo = getArticleInfoFormat3(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
+        
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of 
+        # https://www.nbcnews.com/news/us-news/nick-ut-photojournalist-who-made
+        # -famed-vietnam-war-napalm-girl-n1254517
+        articleInfo = getArticleInfoFormat4(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
+
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of 
+        # https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mumm
+        # y-doesnt-match-3-000-year-old-coffin.html
+        articleInfo = getArticleInfoFormat5(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
 
     # Returns None if the potential article did not match any format
     return None
@@ -318,10 +336,6 @@ def getArticles(category, domain, lastUpdate, mainLink):
 
                 count += 1
                 print(count)
-
-                # Adds a category and link item to the article dictionary
-                articlesInfo['category'] = category
-                articlesInfo['link'] = articleLink
 
                 # Adds dictionary and link to the list of found articles
                 artDictionaries.append(articlesInfo)
@@ -377,8 +391,13 @@ def domainScrape(domain, lastUpdate):
     # Selects a subset of the links from the list above that only contains links
     # to the main categories in the website
     categoryLinkTuples = getCategoryLinks(domain, linkTuplesList)
+
     for x in categoryLinkTuples:
         print(x)
+
+    # Looks through all articles on website if no links are found
+    if (len(categoryLinkTuples) == 0):
+        categoryLinkTuples = [('', domain)]
 
     # Initializes lists that will store all the author, categories, headlines,
     # images, links, scores, sub-headlines, and update times for each article
