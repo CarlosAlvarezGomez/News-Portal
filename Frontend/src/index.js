@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 
 const url = window.location.toString()
 
+// Goes to main page if there is no 'article' after the domain name
 if (url.substring(22,29) !== 'article') {
   ReactDOM.render(
     <React.StrictMode>
@@ -14,6 +15,8 @@ if (url.substring(22,29) !== 'article') {
     </React.StrictMode>,
     document.getElementById('root')
   );
+
+// Goes to the read article page if 'article' is right after the domain name
 } else {
   ReactDOM.render(
     <React.StrictMode>

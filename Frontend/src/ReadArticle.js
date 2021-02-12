@@ -1,11 +1,28 @@
 import React from 'react';
+import { useState } from 'react';
 import './ReadArticle.css';
 import { NavBar } from './Components/NavBar/NavBar';
+import axios from 'axios';
 
 const ReadArticle  = () => {
   
-  const urlParams = window.location
+  // Gets article id
+  const ID = window.location.toString().split('/')[4]
+  console.log(ID)
+  const [articleData, setArticleData] = useState({})
 
+  // Gets article data from backend
+  axios({
+    method: 'GET',
+    url:'http://localhost:8081/article/',
+    params: {ID: ID}
+  }).then(res => {
+    setArticleData(res.data[0])
+  }).catch( err => {
+    console.log(err)
+  })  
+
+  // Returns result
   return (
       <div>
         <section className="heading">
@@ -14,7 +31,7 @@ const ReadArticle  = () => {
             {NavBar()}
           </div>
         </section>
-        <iframe src="https://www.dailymail.co.uk/news/article-9217377/Joe-Jill-Biden-pay-respects-Officer-Brian-Sicknick-lies-honor-Capitol.html"/>
+        <iframe src={articleData.Link}/>
       </div>
     );
 }

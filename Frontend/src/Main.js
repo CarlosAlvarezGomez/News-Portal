@@ -7,15 +7,17 @@ const Main  = () => {
   
   const tabs = ["us", "world", "politics", "business", "health", "entertainment", "opinion"];
   
+  // Tries to find a category in link
   const urlParams = window.location.toString().substring(22).split('/')
   var cat = ''
   if (tabs.indexOf(urlParams[0].toLowerCase()) !== -1) {
     cat = urlParams[0]
+  
+  // Sets category to 'us' if no category is found
   } else {
     cat = 'us'
   }
   const category = cat
-
 
   return (
       <div>
