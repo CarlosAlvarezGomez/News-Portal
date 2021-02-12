@@ -10,6 +10,18 @@ import datetime
 import re
 import time
 
+# Takes in a time as a string in the form HH:MM, and another string that's
+# either 'AM' or 'PM,' and returns a tuple of ints: the first int represents the
+# hour in a 24-hour clock, and the second represents the minutes
+def getTime(time, ampm):
+    timeList = time.split(":")
+    if ((ampm == "AM") & (timeList[0] != "12")) | ((ampm == "PM") & (timeList[0] == "12")):
+        return int(timeList[0]), int(timeList[1])
+    elif (ampm == "AM"):
+        return 0, int(timeList[1])
+    else:
+        return int(timeList[0])+12, int(timeList[1])
+
 # Takes in a bs4 soup containing the html code from a article's webpage, and
 # returns a dictionary containing the author, headline, image, score,
 # sub-headline, and update time of the article. Assumed format: https://www.nbc
@@ -50,6 +62,19 @@ def getArticleInfoFormat4(page_html):
     else:
         image = ''
 
+    # Gets text
+    articleBodies = page_html.find_all(class_=re.compile('article-body__content'))
+    if len(articleBodies) > 0:
+        ps = articleBodies[0].find_all('p')
+        if len(ps) > 0:
+            text = ps[0].get_text()
+            for p in ps[1:]:
+                text += ' ' + p.get_text()
+        else:
+            return None
+    else:
+        return None
+
     # Gets sub-headline
     dek = header.find_all(class_ = re.compile('dek'))
     body = page_html.find_all(class_ = re.compile('body'))
@@ -86,7 +111,9 @@ def getArticleInfoFormat4(page_html):
         return None
 
     return ({'author': author,
+    'format' : 4,
     'headline' : headline,
-    'subHeadline' : subHeadline,
     'image' : image,
+    'text' : text,
+    'subHeadline' : subHeadline,
     'updateTime' : updateTime})

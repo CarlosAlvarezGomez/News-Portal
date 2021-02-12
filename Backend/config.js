@@ -1,10 +1,12 @@
 'use strict';
 
+// Imports necessary libraries
 const dotenv = require('dotenv');
 const assert = require('assert');
 
 dotenv.config();
 
+// Imports necessary configurations
 const {PORT, HOST, HOST_URL, SQL_USER, SQL_PASSWORD, SQL_DATABASE, SQL_SERVER} = process.env;
 
 const sqlEncrypt = process.env.ENCRYPT === "true";

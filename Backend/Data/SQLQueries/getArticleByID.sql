@@ -1,0 +1,2 @@
+SELECT * FROM ArticleInfo2
+WHERE ID=@ID;

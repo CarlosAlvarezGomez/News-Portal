@@ -15,6 +15,7 @@ from format3Scraper import getArticleInfoFormat3
 from format4Scraper import getArticleInfoFormat4
 from format5Scraper import getArticleInfoFormat5
 from format6Scraper import getArticleInfoFormat6
+from format7Scraper import getArticleInfoFormat7
 from StringHelpers import *
 from sqlalchemy import create_engine
 import bs4
@@ -28,10 +29,10 @@ import time
 # Creates global variables
 
 # List of domains we plan to scrape
-domains = ([ # 'https://abcnews.go.com',
+domains = ([ 'https://abcnews.go.com',
 # 'https://theintercept.com', Not working
 # 'https://www.cnn.com', Not working
-# 'https://www.dailymail.co.uk',
+'https://www.dailymail.co.uk',
 'https://www.dailywire.com',
 # 'https://www.foxbusiness.com', Not working
 # 'https://www.foxnews.com', Not working
@@ -94,8 +95,8 @@ def getSoup(url):
     # Turns the html code into a soup and returns it
     return soup(page_html, "html.parser")
 
-# Takes in an element and returns a category it is associated with. Returns an 
-# empty string if the element is not associated with any categories 
+# Takes in an element and returns a category it is associated with. Returns an
+# empty string if the element is not associated with any categories
 def getAssociatedCategory(element):
 
     # Imports global variable
@@ -110,7 +111,7 @@ def getAssociatedCategory(element):
         length = len(subStrings)
         i = 0
 
-        # Goes through each substring and checks if it matches one of the 
+        # Goes through each substring and checks if it matches one of the
         # desired categories
         while (i < length) and (subStrings[i] not in categories):
             i += 1
@@ -129,7 +130,7 @@ def getRelevantLinks(soup):
             acc.append((getAssociatedCategory(element), element['href']))
     return acc
 
-# Takes in a domain and a link, and adds the domain or https:// to the link if 
+# Takes in a domain and a link, and adds the domain or https:// to the link if
 # necessary
 def formatStartOfLink(domain, link):
     # Adds a domain if necessary
@@ -144,9 +145,9 @@ def formatStartOfLink(domain, link):
     if ('https://' != link[:8]):
         link = 'https://' + link
     return link
-    
-# Takes in a domain (string), a tuple containing a category (string) and a link 
-# (string) and returns a link (string) formatted so that it accesses the 
+
+# Takes in a domain (string), a tuple containing a category (string) and a link
+# (string) and returns a link (string) formatted so that it accesses the
 # domain's main webpage for that category
 def formatLink(domain, linkTuple):
 
@@ -161,7 +162,7 @@ def formatLink(domain, linkTuple):
     length = len(subStrings)
     while (i < length) and (formatString(subStrings[i]) != category):
         i += 1
-    
+
     # Stores that segment
     subString = subStrings[i]
 
@@ -172,7 +173,7 @@ def formatLink(domain, linkTuple):
     # domain's main page for that category
     return (category, link[:(index+len(subString))])
 
-# Takes in a list of tuples containing categories (as a string) and links (as a 
+# Takes in a list of tuples containing categories (as a string) and links (as a
 # string), and returns a set of tuples containing categories and links to the
 # domain's main webpage for each category
 def getCategoryLinks(domain, linkTuplesList):
@@ -197,7 +198,7 @@ def getScore(articleInfo):
     global lastUpdate
     return (articleInfo['updateTime'] - lastUpdate).total_seconds()
 
-# Takes in a url to an article, a domain, a category, and an update time, and, 
+# Takes in a url to an article, a domain, a category, and an update time, and,
 # if the article was updated after the last update time, returns the author,
 # category, headline, image, link, score, subheadline, and update time of the
 # article the link points to. Returns an empty list otherwise.
@@ -213,7 +214,18 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
     # Finds the category in the page_html if necessary
     if category == '':
 
-
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of
+        # https://www.dailywire.com/news/netflix-dominates-2021-golden-globe-no
+        # minations-full-list-announced
+        articleInfo = getArticleInfoFormat6(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
 
     # Finds the remaining necessary info given the category
     else:
@@ -260,9 +272,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
                 return articleInfo
             else:
                 return None
-        
+
         # Tries to get the information from the link assuming the format of the
-        # website is similar to the format of 
+        # website is similar to the format of
         # https://www.nbcnews.com/news/us-news/nick-ut-photojournalist-who-made
         # -famed-vietnam-war-napalm-girl-n1254517
         articleInfo = getArticleInfoFormat4(page_html)
@@ -276,10 +288,24 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
                 return None
 
         # Tries to get the information from the link assuming the format of the
-        # website is similar to the format of 
+        # website is similar to the format of
         # https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mumm
         # y-doesnt-match-3-000-year-old-coffin.html
         articleInfo = getArticleInfoFormat5(page_html)
+        if (articleInfo != None):
+            if (articleInfo['updateTime'] > lastUpdate):
+                articleInfo['score'] = getScore(articleInfo)
+                articleInfo['category'] = category
+                articleInfo['link'] = articleLink
+                return articleInfo
+            else:
+                return None
+
+        # Tries to get the information from the link assuming the format of the
+        # website is similar to the format of
+        # https://www.univision.com/univision-news/health/cafe-dato-how-to-comb
+        # at-stress-in-times-of-coronavirus
+        articleInfo = getArticleInfoFormat7(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
                 articleInfo['score'] = getScore(articleInfo)
@@ -294,15 +320,15 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
 
 # Takes in a category, domain, update time, and link, and returns a list of all
 # the authors, categories, headlines, images, links, scores, subheadlines, and
-# update times of all the articles on the link that were updated after the 
+# update times of all the articles on the link that were updated after the
 # given update time.
 def getArticles(category, domain, lastUpdate, mainLink):
 
     print('Mainlink: ' + mainLink)
     # Gets the soup element for the mainLink
     page_html = getSoup(mainLink)
-    
-    # Gets all descendants of the main soup element, and filters them using 
+
+    # Gets all descendants of the main soup element, and filters them using
     # getArticle
     filteredDescendants = list(set(filter(getArticle, list(page_html.descendants))))
 
@@ -317,7 +343,7 @@ def getArticles(category, domain, lastUpdate, mainLink):
 
     # func = lambda articleLink : getArticleInfo(articleLink, domain, category, lastUpdate)
     # articlesInfo = list(map(func, articleLinks))
-    count = 0
+
     for articleLink in articleLinks:
 
         # This if-statement is here in order to avoid the error I was getting
@@ -325,23 +351,17 @@ def getArticles(category, domain, lastUpdate, mainLink):
         if 'â' in articleLink:
             continue
 
-        print(articleLink)
-        articlesInfo = getArticleInfo(articleLink, domain, category, lastUpdate)
-
+        articlesInfo = getArticleInfo(articleLink, category, domain, lastUpdate)
         # Checks if article info was actually found
         if articlesInfo != None:
 
             # Checks if the article is already in the list
             if articleLink not in artLinks:
 
-                count += 1
-                print(count)
-
                 # Adds dictionary and link to the list of found articles
                 artDictionaries.append(articlesInfo)
                 artLinks.append(articleLink)
-
-
+        
     return artDictionaries
 
 # Takes in a list of dictionaries, dicts, and a key, k, and returns a shortened
@@ -358,23 +378,47 @@ def removeDuplicateDicts(dicts, key):
         if not(isInList[index]):
             newDicts.append(dic)
             isInList[index] = True
-    
+
     return newDicts
+
+# Takes in a dictionary, and returns a list of value from the dictionary,
+# sorted in alphabetical order by the keys
+def dictionary2List(dic):
+
+    # Gets a list of items, represented as a list of tuples
+    lst = list(dic.items())
+    
+    # Sorts the list by alphabetical order of keys
+    lst.sort(key=lambda i: i[0])
+
+    # Returns the values from the list
+    return list(map(lambda x : x[1], lst))
+
+# Gets the number of rows of the table in sql
+def getTableSize(database, password, server, tableName, user):
+
+    # Connects to the database
+    connection = create_engine('mssql+pymssql://'+user+':'+password+'@'+server+'/'+database)
+
+    # Setns
+    size = connection.execute('SELECT COUNT(*) as size FROM ' + tableName + ';').fetchall()
+
+    return size[0][0]
 
 ################################################################################
 # END SCRAPING HELPER FUNCTIONS
 ################################################################################
 
 # Takes in a pandas dataframe and adds it to a database
-def addToDatabase(database, dataframe, password, server, user):
+def addToDatabase(database, dataframe, password, server, tableName, user):
 
     # Connects to the database
     connection = create_engine('mssql+pymssql://'+user+':'+password+'@'+server+'/'+database)
 
     # Adds data to dataframe
-    dataframe.to_sql('ArticleInfo', con=connection, if_exists='append', index=False)
+    dataframe.to_sql(tableName, con=connection, if_exists='append', index=False)
 
-# Takes in a domain and a time, and returns a dataframe of all the articles 
+# Takes in a domain and a time, and returns a dataframe of all the articles
 # from that domain that have been updated after the given time
 def domainScrape(domain, lastUpdate):
     print(domain)
@@ -404,28 +448,56 @@ def domainScrape(domain, lastUpdate):
     allArticles = []
 
     # Goes through each tuple and gets a cetegory, headline, sub-headline, link
-    # image, update time, author, and a score for each article found on each 
+    # image, update time, author, and a score for each article found on each
     # category link. Returns a list for each one of these elements
     func1 = lambda clt: getArticles(clt[0], domain, lastUpdate, clt[1])
     allArticles = removeDuplicateDicts(flatten(list(map(func1, categoryLinkTuples))), 'link')
-    
-    # Converts the list of dictionaries into 2D array by replacing each 
+
+    # Adds the domain and id to each article in the array
+    # Gets the current size of the table
+    currentID = getTableSize(database, password, server, tableName, user) + 1
+
+    for articleDict in allArticles:
+        articleDict['id'] = currentID
+        currentID += 1
+
+    # Converts the list of dictionaries into 2D array by replacing each
     # dictionary with a 1D list
-    articleArray = list(map(lambda x : x.values(), allArticles))
+    articleArray = list(map(dictionary2List, allArticles))
 
     # Converts the 2D array into a pandas dataframe
-    articlesDF = pd.DataFrame(articleArray, columns=['Author', 'Headline',
-    'SubHeadline', 'Image', 'UpdateTime', 'Score', 'Category', 'Link'])
+    articlesDF = pd.DataFrame(articleArray, columns=['Author', 'Category',
+    'Format', 'Headline', 'ID', 'Image', 'Link', 'Score', 'SubHeadline',
+    'Text', 'UpdateTime'])
 
     # Returns the dataframe
     return articlesDF
 
-lastUpdate = datetime.datetime(2021, 1, 23, 23, 33)
-func = lambda x : domainScrape(x, lastUpdate)
+lastUpdate = datetime.datetime(2018, 1, 23, 23, 33)
+func = lambda x : addToDatabase(database, domainScrape(x, lastUpdate), password, server, tableName, user)
 
 for domain in domains:
     func(domain)
 
-# dmail_html = 'https://www.dailymail.co.uk/sciencetech/article-9219601/Egyptian-mummy-doesnt-match-3-000-year-old-coffin.html'
-# dmail_soup = getSoup(dmail_html)
-# getArticleInfoFormat5(dmail_soup)
+# html = 'https://www.nbcnews.com/news/us-news/food-banks-struggling-feed-hungry-during-covid-look-forward-biden-n1256874'
+# the_soup = getSoup(html)
+# a = [getArticleInfoFormat4(the_soup)]
+# a[0]['text'] = 'TEXT'
+# a[0]['link'] = 'https://www.dailywire.com/news/netflix-dominates-2021-golden-globe-nominations-full-list-announced'
+# a[0]['score'] = 0.1
+
+# # Gets the current size of the table
+# currentID = getTableSize(database, password, 'ArticleInfo', server, user) + 1
+
+# for articleDict in a:
+#     articleDict['id'] = currentID
+#     currentID += 1
+
+# # Converts the list of dictionaries into 2D array by replacing each
+# # dictionary with a 1D list
+# articleArray = list(map(dictionary2List, a))
+
+# # Converts the 2D array into a pandas dataframe
+# articlesDF = pd.DataFrame(articleArray, columns=['Author', 'Category',
+# 'Headline', 'ID', 'Image', 'Link', 'Score', 'SubHeadline', 'Text',
+# 'UpdateTime'])

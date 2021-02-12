@@ -19,4 +19,18 @@ const getArticles = async (category, requestNumber) => {
     }
 }
 
-module.exports = {getArticles}
+const getArticleByID = async (ID) => {
+    try {
+        let pool = await sql.connect(config.sql);
+        const SQLQueries = await utils.loadSQLQueries('SQLQueries');
+        const articles = await pool.request()
+            .input('ID', sql.VarChar, ID)
+            .query(SQLQueries.getArticleByID);
+        return articles.recordset;
+    } catch (error) {
+        return error.message
+    }
+}
+
+
+module.exports = {getArticles, getArticleByID}

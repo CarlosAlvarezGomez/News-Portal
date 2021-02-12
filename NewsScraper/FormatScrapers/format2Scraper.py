@@ -12,8 +12,7 @@ import time
 
 # Takes in a bs4 soup containing the html code from a article's webpage, and
 # returns a dictionary containing the author, headline, image, score,
-# sub-headline, and update time of the article. Assumed format: https://www.cnn
-# .com/2021/01/06/health/south-africa-sequencing-coronavirus-variant/index.html
+# sub-headline, and update time of the article. Assumed format: https://www.cnn.com/2021/01/06/health/south-africa-sequencing-coronavirus-variant/index.html
 def getArticleInfoFormat2(page_html):
 
     # Gets the metadata seciont of the article, which contains the information
@@ -48,6 +47,15 @@ def getArticleInfoFormat2(page_html):
     else:
         return None
     
+    # Gets text
+    paragraphs = page_html.find_all(class_=re.compile('paragraph'))
+    if len(paragraphs) > 1:
+        text = paragraphs[1].get_text()
+        for p in paragraphs[2:]:
+            text += ' ' + p.get_text()
+    else:
+        return None
+
     # Loops for a p element with 'body' in its class name, and, if found, puts 
     # the first 100 characters of its text as the subHeadline
     ps = page_html.find_all('p', class_ = re.compile('body'))
@@ -101,7 +109,9 @@ def getArticleInfoFormat2(page_html):
     
     # Creates and returns the dictionary
     return ({'author': author,
+    'format' : 2,
     'headline' : headline,
-    'subHeadline' : subHeadline,
     'image' : image,
+    'text' : text,
+    'subHeadline' : subHeadline,
     'updateTime' : updateTime})

@@ -36,15 +36,11 @@ def getArticleInfoFormat3(page_html):
     else:
         return None
 
-    # Gets the sub-headline
-    h2s = page_html.find_all('h2')
-    if len(h2s) > 0:
-        subHeadline = h2s[0].get_text()
-    else:
-        return None
-    
     # Gets images
     articleBody = page_html.find_all(class_=re.compile('body'))
+    if len(articleBody) == 0:
+        return None
+        
     if len(articleBody) > 0:
         imgs = articleBody[0].find_all('img')
         if len(imgs) > 1:
@@ -53,6 +49,23 @@ def getArticleInfoFormat3(page_html):
             image = ''
     else:
         image = ''
+
+    # Gets text
+    ps = articleBody[0].find_all('p', recursive=False)
+    if len(ps) > 0:
+        text = ps[0].get_text()
+        for p in ps:
+            if p.find_all('strong') == []:
+                text += ' ' + p.get_text()
+    else:
+        return None
+
+    # Gets the sub-headline
+    h2s = page_html.find_all('h2')
+    if len(h2s) > 0:
+        subHeadline = h2s[0].get_text()
+    else:
+        return None
 
     # Gets update time
     times = page_html.find_all('time')
@@ -82,7 +95,9 @@ def getArticleInfoFormat3(page_html):
 
     # Creates and returns the dictionary
     return ({'author': author,
+    'format' : 3,
     'headline' : headline,
-    'subHeadline' : subHeadline,
     'image' : image,
+    'text' : text,
+    'subHeadline' : subHeadline,
     'updateTime' : updateTime})

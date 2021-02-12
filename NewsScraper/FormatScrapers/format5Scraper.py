@@ -22,7 +22,6 @@ def getArticleInfoFormat5(page_html):
     if len(authorSections) > 0:
         authorSection = authorSections[0]
         author = authorSection.get_text()[3:]
-        print('Author: ' + author)
     else:
         return None
 
@@ -30,7 +29,6 @@ def getArticleInfoFormat5(page_html):
     h2s = page_html.find_all('h2')
     if len(h2s) > 0:
         headline = h2s[0].get_text()
-        print('Headline: ' + headline)
     else:
         return None
 
@@ -41,7 +39,6 @@ def getArticleInfoFormat5(page_html):
         if len(imgs) > 0:
             if 'data-src' in imgs[0].attrs.keys():
                 image = imgs[0]['data-src']
-                print('Image: ' + image)
             else:
                 image = ''
         else:
@@ -49,15 +46,20 @@ def getArticleInfoFormat5(page_html):
     else:
         return None
 
-    # Gets sub-headline
-    ps = body[0].find_all('p')
+    # Gets text
+    ps = body[0].find_all('p', recursive=False)
     if len(ps) > 0:
-        subHeadline = ps[0].get_text()
-        if len(subHeadline) > 100:
-            subHeadline = subHeadline[:100]
-        print('Sub-Headline: ' + subHeadline)
+        text = ps[0].get_text()
+        for p in ps[1:]:
+            if len(p.find_all('span')) == 0:
+                text += ' ' + p.get_text()
     else:
         return None
+    
+    # Gets sub-headline
+    subHeadline = ps[0].get_text()
+    if len(subHeadline) > 100:
+        subHeadline = subHeadline[:100]
 
     # Gets update time
     bylines = page_html.find_all(class_=re.compile('byline-section'))
@@ -72,14 +74,15 @@ def getArticleInfoFormat5(page_html):
             hour = int(hhmm[0])
             minutes = int(hhmm[1])
             updateTime = datetime.datetime(year, month, day, hour, minutes)
-            print('Update Time: ' + updateTime.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
         else:
             return None
     else:
         return None
 
     return ({'author': author,
+    'format' : 5,
     'headline' : headline,
-    'subHeadline' : subHeadline,
     'image' : image,
+    'text' : text,
+    'subHeadline' : subHeadline,
     'updateTime' : updateTime})
