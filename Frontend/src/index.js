@@ -24,6 +24,7 @@ if (url.substring(22,29) !== 'article') {
     </React.StrictMode>,
     document.getElementById('root')
   );
+
 }
 
 

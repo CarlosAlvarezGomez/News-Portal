@@ -2,13 +2,13 @@ import React from 'react';
 import { useState } from 'react';
 import './ReadArticle.css';
 import { NavBar } from './Components/NavBar/NavBar';
+import { MyIFrame } from './Components/MyIFrame/MyIFrame';
 import axios from 'axios';
 
 const ReadArticle  = () => {
   
   // Gets article id
   const ID = window.location.toString().split('/')[4]
-  console.log(ID)
   const [articleData, setArticleData] = useState({})
 
   // Gets article data from backend
@@ -31,7 +31,8 @@ const ReadArticle  = () => {
             {NavBar()}
           </div>
         </section>
-        <iframe src={articleData.Link}/>
+        {MyIFrame(articleData.Link)}
+        {/* <iframe id='myIFrameID' src={articleData.Link}></iframe> */}
       </div>
     );
 }

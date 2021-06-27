@@ -14,7 +14,8 @@ export function Article(art, index, columnName) {
   // and without the <img> respectively
   if (art.Image !== "") {
     return (
-      <a href={'http://localhost:3000/article/' + art.ID}>
+      //<a href={'http://localhost:3000/article/' + art.ID}>
+      <a href={art.Link}>
         <div className="article">
           <div className="textGroup1">
             <h3 className="text">{art.Headline}</h3>
@@ -31,7 +32,8 @@ export function Article(art, index, columnName) {
     
   } else {
     return (
-      <a href={'http://localhost:3000/article/' + art.ID}>
+      //<a href={'http://localhost:3000/article/' + art.ID}>
+      <a href={art.Link}>
         <div className="article">
           <div className="textGroup2">
             <h3 className="text">{art.Headline}</h3>
