@@ -194,9 +194,19 @@ def getArticle(element):
     else:
         return False
 
+def getLabels(articleInfo):
+    global model
+    labels = convert_to_binary(model(articleInfo['text']))
+    binary_labels = convert_to_binary(labels)
+    prop_percentage = binary_labels.sum() / binary_labels.size().item()
+    compressed_labels = compress(labels)
+    return prop_percentage, compressed_labels
+    
+    
+
 def getScore(articleInfo):
     global lastUpdate
-    return (articleInfo['updateTime'] - lastUpdate).total_seconds()
+    return ((articleInfo['updateTime'] - lastUpdate).total_seconds())*article_info
 
 # Takes in a url to an article, a domain, a category, and an update time, and,
 # if the article was updated after the last update time, returns the author,
@@ -221,6 +231,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat6(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['link'] = articleLink
                 return articleInfo
@@ -237,6 +250,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat1(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
@@ -251,6 +267,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat2(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
@@ -266,6 +285,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat3(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
@@ -280,6 +302,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat4(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
@@ -294,6 +319,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat5(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
@@ -308,6 +336,9 @@ def getArticleInfo(articleLink, category, domain, lastUpdate):
         articleInfo = getArticleInfoFormat7(page_html)
         if (articleInfo != None):
             if (articleInfo['updateTime'] > lastUpdate):
+                prop_percentage, labels = getLabels(articleInfo)
+                articleInfo['prop_percentage'] = prop_percentage
+                articleInfor['labels'] = labels
                 articleInfo['score'] = getScore(articleInfo)
                 articleInfo['category'] = category
                 articleInfo['link'] = articleLink
