@@ -26,3 +26,6 @@ Frontend/yarn-debug.log*
 Frontend/yarn-error.log*
 
 NewsScraper/Creds.py
+
+# Server
+Digital-Ocean
