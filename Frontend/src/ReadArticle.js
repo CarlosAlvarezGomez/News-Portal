@@ -26,7 +26,7 @@ const ReadArticle  = () => {
   return (
       <div>
         <section className="heading">
-          <h1>NEWS-PORTAL</h1>
+          <h1>NEWS PALATE</h1>
           <div className="navBar">
             {NavBar()}
           </div>

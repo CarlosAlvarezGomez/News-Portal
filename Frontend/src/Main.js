@@ -9,20 +9,19 @@ const Main  = () => {
   
   // Tries to find a category in link
   const urlParams = window.location.toString().substring(22).split('/')
-  var cat = ''
+  var category = ''
   if (tabs.indexOf(urlParams[0].toLowerCase()) !== -1) {
-    cat = urlParams[0]
+    category = urlParams[0]
   
   // Sets category to 'us' if no category is found
   } else {
-    cat = 'us'
+    category = 'us'
   }
-  const category = cat
 
   return (
       <div>
         <section className="heading">
-          <title><h1>NEWS-BALANCE</h1></title>
+          <title><h1>NEWS PALATE</h1></title>
           <div className="navBar">
             {NavBar()}
           </div>

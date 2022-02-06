@@ -4,7 +4,7 @@ import './Button.css';
 export const Button = (text) => {
 
     return (
-        <button key={'Button: ' + text} onClick={() => window.location= ('http://localhost:3000/' + text).toLowerCase()}>
+        <button key={'Button: ' + text} onClick={() => window.location= ('https://newspalate.com/' + text).toLowerCase()}>
           {text}
         </button>
       );
