@@ -22,7 +22,7 @@ const Main  = () => {
   return (
       <div>
         <section className="heading">
-          <title><h1>NEWS-PORTAL</h1></title>
+          <title><h1>NEWS-BALANCE</h1></title>
           <div className="navBar">
             {NavBar()}
           </div>
