@@ -40,7 +40,7 @@ export function ArticleList(category) {
               // Adds the observer if this is the second to last article of the
               // list 
               if (articles.length === index + 2) {
-                return (<div ref={lastArticleElementRef}>{Article(art, index, 'left')}</div>);
+                return (<div ref={lastArticleElementRef} key={Math.random()}>{Article(art, index, 'left')}</div>);
 
               } else {
                 return Article(art, index, 'left');
@@ -53,7 +53,7 @@ export function ArticleList(category) {
               // Adds the observer if this is the second to last article of the
               // list 
               if (articles.length === index + 2) {
-                return (<div ref={lastArticleElementRef}>{Article(art, index, 'right')}</div>);
+                return (<div ref={lastArticleElementRef} key={Math.random()}>{Article(art, index, 'right')}</div>);
                 
               } else {
                 return Article(art, index, 'right');

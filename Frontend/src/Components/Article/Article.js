@@ -15,7 +15,7 @@ export function Article(art, index, columnName) {
   // if (art.Image !== "") {
     return (
       //<a href={'http://localhost:3000/article/' + art.ID}>
-      <a href={art.Link}>
+      <a href={art.Link} key={Math.random()}>
         <div className="article">
           <div className="textGroup1">
             <h3 className="text">{art.Headline}</h3>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 export function useGetArticles(category, pageNumber) {
   const [loading, setLoading] = useState(true);
@@ -13,15 +13,16 @@ export function useGetArticles(category, pageNumber) {
 
     () =>  {
       const output = Array(10).fill({
-        Link: "www.google.com",
+        Link: "link",
         Headline: "ARTICLE HEADLINE",
         Author: "Someone",
         SubHeadline: "Sub-headline for this article",
-        UpdateTime: "January 1, 2022, 12:00 AM"
+        UpdateTime: "January 1, 2022, 12:00 AM",
+        Image: "us.jpg"
         })
       setLoading(true);
       setError(false);
-      setArticles([... articles, ])
+      setArticles([... articles, ...output])
       setHasMore(true);
       setLoading(false);
   }, [pageNumber])
