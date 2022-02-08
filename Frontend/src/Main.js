@@ -8,7 +8,10 @@ const Main  = () => {
   const tabs = ["us", "world", "politics", "business", "health", "entertainment", "opinion"];
   
   // Tries to find a category in link
+  console.log(window.location.toString())
+  console.log('here1')
   const urlParams = window.location.toString().substring(22).split('/')
+  console.log('here2')
   var category = ''
   if (tabs.indexOf(urlParams[0].toLowerCase()) !== -1) {
     category = urlParams[0]
